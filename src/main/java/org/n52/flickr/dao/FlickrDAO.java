@@ -31,7 +31,6 @@ package org.n52.flickr.dao;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import org.n52.flickr.FlickrHarvester;
 import org.n52.flickr.model.AccessToken;
 import org.n52.flickr.model.FlickrLocation;
 import org.n52.flickr.model.FlickrMessage;

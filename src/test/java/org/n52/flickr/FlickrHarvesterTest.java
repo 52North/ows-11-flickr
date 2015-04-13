@@ -38,7 +38,7 @@ import org.n52.socialmedia.model.HumanVisualPerceptionObservation;
 
 public class FlickrHarvesterTest {
 
-	@Test
+	@Test @Ignore
 	public void shouldReturnPhotosWithLocationNearCoordinates() throws DecodingException {
 		@SuppressWarnings("unused")
 		Collection<HumanVisualPerceptionObservation> observations = new FlickrHarvester().searchForObservationsAt(51.930077892, 7.625061267);

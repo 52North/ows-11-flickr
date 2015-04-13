@@ -42,7 +42,6 @@ import java.util.Set;
 import org.joda.time.DateTime;
 import org.n52.flickr.dao.FlickrDAO;
 import org.n52.flickr.model.AccessToken;
-import org.n52.flickr.model.FlickrMessage;
 import org.n52.flickr.model.FlickrQuery;
 import org.n52.socialmedia.DecodingException;
 import org.n52.socialmedia.Harvester;
@@ -195,7 +194,7 @@ public class FlickrHarvester implements Harvester {
 		
 		try {
 			if (ids != null && ids.length > 0) {
-				long[] longIds = getLongIdsFrom(ids);
+//				long[] longIds = getLongIdsFrom(ids);
 				
 				FlickrDAO dao = new FlickrDAO(accessToken, oauthConsumerKey, oauthConsumerSecret);
 
@@ -212,13 +211,13 @@ public class FlickrHarvester implements Harvester {
 		return result;	
 	}
 
-	private long[] getLongIdsFrom(String[] ids) {
-		long[] result = new long[ids.length];
-		int index = 0;
-		for (String id : ids) {
-			result[index++] = Long.parseLong(id);
-		}
-		return result;
-	}
+//	private long[] getLongIdsFrom(String[] ids) {
+//		long[] result = new long[ids.length];
+//		int index = 0;
+//		for (String id : ids) {
+//			result[index++] = Long.parseLong(id);
+//		}
+//		return result;
+//	}
 	
 }
