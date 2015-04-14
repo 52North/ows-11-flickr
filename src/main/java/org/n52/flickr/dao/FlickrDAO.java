@@ -60,6 +60,8 @@ import com.flickr4java.flickr.photos.geo.GeoInterface;
  */
 public class FlickrDAO {
 	
+	private static final String FLICKR_USR_URL = "https://www.flickr.com/photos/%s";
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(FlickrDAO.class);
 
 	private Flickr flickr;
@@ -108,6 +110,7 @@ public class FlickrDAO {
 
         int pageIndex = 1;
         int pages = 1;
+        int photoIndex = 1;
         do {
             PhotoList<Photo> photoList = photoInterface.search(params, 500, pageIndex);
             pages = photoList.getPages();
@@ -123,13 +126,14 @@ public class FlickrDAO {
                 // careful, this call takes long:
                 FlickrMessage flickrMessage = createFlickrMessage(photo);
                 if (flickrMessage != null) {
-                	LOGGER.info("Downloaded photo No. {}.: {}", i, flickrMessage);
+                	LOGGER.info("Downloaded photo No. {}.: {}", photoIndex, flickrMessage);
 
                 	flickrPhotos.add(flickrMessage);
                 } else {
                 	LOGGER.info("Downloaded photo No. {}, but not geo located, hence skipped",
-                			i);
+                			photoIndex);
                 }
+                photoIndex++;
             }
 
             pageIndex++;
@@ -173,7 +177,7 @@ public class FlickrDAO {
 
         	// user:
         	User user = photoInfo.getOwner();
-        	flickrMessage.setProcedure(new Procedure(user.getUsername(), user.getProfileurl()));
+        	flickrMessage.setProcedure(createProcedureFrom(user));
 
         	return flickrMessage;
 
@@ -181,5 +185,13 @@ public class FlickrDAO {
         	return null;
         }
 	}
-	
+
+	private Procedure createProcedureFrom(User user) {
+		String identifier = user.getProfileurl();
+		if (identifier==null || identifier.isEmpty()) {
+			identifier = String.format(FLICKR_USR_URL, user.getId());
+		}
+		return new Procedure(user.getUsername(), identifier);
+	}
+
 }

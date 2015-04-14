@@ -88,9 +88,17 @@ public class FlickrMessage implements HumanVisualPerceptionObservation {
 		return StringUtil.escapeForXML(String.format("TITLE: %s; CAPTION: %s; TAGS: %s; ",
 				title!=null?!title.isEmpty()?title:"title-not-set":"title-not-set",
 				caption!=null?!caption.isEmpty()?caption:"caption-not-set":"caption-not-set",
-				tags!=null?!tags.isEmpty()?tags:"tags-not-set":"tags-not-set"));
+				tags!=null?!tags.isEmpty()?printTags():"tags-not-set":"tags-not-set"));
 	}
 	
+	private String printTags() {
+		StringBuilder builder = new StringBuilder();
+		for (Tag tag : tags) {
+			builder.append(tag.getValue()).append(", ");
+		}
+		return builder.substring(0, builder.length()-2);
+	}
+
 	public void setIdentifier(String photoID) {
 		id = photoID;
 	}
@@ -153,13 +161,13 @@ public class FlickrMessage implements HumanVisualPerceptionObservation {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("FlickrMessage [getLocation()=").append(getLocation())
-				.append(", getPhenomenonTime()=").append(getPhenomenonTime())
-				.append(", getResultTime()=").append(getResultTime())
-				.append(", getIdentifier()=").append(getIdentifier())
-				.append(", getProcedure()=").append(getProcedure())
-				.append(", getResultHref()=").append(getResultHref())
-				.append(", getResult()=").append(getResult()).append("]");
+		builder.append("FlickrMessage [location=").append(getLocation())
+				.append(", phenomenonTime=").append(getPhenomenonTime())
+				.append(", resultTime=").append(getResultTime())
+				.append(", identifier=").append(getIdentifier())
+				.append(", procedure=").append(getProcedure())
+				.append(", resultHref=").append(getResultHref())
+				.append(", result=").append(getResult()).append("]");
 		return builder.toString();
 	}
 

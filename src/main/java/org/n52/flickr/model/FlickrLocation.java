@@ -71,7 +71,7 @@ public class FlickrLocation implements Location {
 		if (place != null && place.getPlaceId() != null && !place.getPlaceId().isEmpty()) {
 			return place.getPlaceId();
 		}
-		return "place-id-not-set";
+		return String.format("%s_place-id-not-set",hashCode());
 	}
 
 	@Override
@@ -84,11 +84,47 @@ public class FlickrLocation implements Location {
 
 	@Override
 	public String toString() {
-		return new StringBuilder(350).append("FlickrLocation [getLatitude()=").append(getLatitude())
-				.append(", getLongitude()=").append(getLongitude())
-				.append(", getAccuracy()=").append(getAccuracy())
-				.append(", getId()=").append(getId())
-				.append(", getName()=").append(getName()).append("]").toString();
+		return new StringBuilder(350).append("FlickrLocation [latitude=").append(getLatitude())
+				.append(", longitude=").append(getLongitude())
+				.append(", accuracy=").append(getAccuracy())
+				.append(", id=").append(getId())
+				.append(", name=").append(getName()).append("]").toString();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + accuracy;
+		result = prime * result + Float.floatToIntBits(latitude);
+		result = prime * result + Float.floatToIntBits(longitude);
+		result = prime * result + ((place == null) ? 0 : place.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		FlickrLocation other = (FlickrLocation) obj;
+		if (accuracy != other.accuracy)
+			return false;
+		if (Float.floatToIntBits(latitude) != Float
+				.floatToIntBits(other.latitude))
+			return false;
+		if (Float.floatToIntBits(longitude) != Float
+				.floatToIntBits(other.longitude))
+			return false;
+		if (place == null) {
+			if (other.place != null)
+				return false;
+		} else if (!place.equals(other.place))
+			return false;
+		return true;
 	}
 
 	

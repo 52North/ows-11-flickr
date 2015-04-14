@@ -50,49 +50,49 @@ import com.flickr4java.flickr.auth.AuthInterface;
 import com.flickr4java.flickr.auth.Permission;
 
 public class FlickrAccessTokenRetriever {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(FlickrHarvester.class);
-	
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(FlickrAccessTokenRetriever.class);
+
 	public static Properties props;
 
 	public static void main(String args[]) throws Exception{
 		String[] props = readProperties();
-		
-	    Flickr flickr = new Flickr(props[0], props[1], new REST());
-	    Flickr.debugStream = false;
-	    Flickr.debugRequest = false;
-        AuthInterface authInterface = flickr.getAuthInterface();
 
-        Scanner scanner = new Scanner(System.in);
+		Flickr flickr = new Flickr(props[0], props[1], new REST());
+		Flickr.debugStream = false;
+		Flickr.debugRequest = false;
+		AuthInterface authInterface = flickr.getAuthInterface();
 
-        Token token = authInterface.getRequestToken();
-        LOGGER.info("token: " + token);
+		Scanner scanner = new Scanner(System.in);
 
-        String url = authInterface.getAuthorizationUrl(token, Permission.READ);
-        LOGGER.info("Follow this URL to authorise yourself on Flickr");
-        LOGGER.info("URL: {}", url);
-        LOGGER.info("Paste in the token it gives you:");
-        LOGGER.info(">>");
+		Token token = authInterface.getRequestToken();
+		LOGGER.info("token: " + token);
 
-        String tokenKey = scanner.nextLine();
-        scanner.close();
+		String url = authInterface.getAuthorizationUrl(token, Permission.READ);
+		LOGGER.info("Follow this URL to authorise yourself on Flickr");
+		LOGGER.info("URL: {}", url);
+		LOGGER.info("Paste in the token it gives you:");
+		LOGGER.info(">>");
 
-        Token requestToken = authInterface.getAccessToken(token, new Verifier(tokenKey));
-        LOGGER.info("Authentication success");
+		String tokenKey = scanner.nextLine();
+		scanner.close();
 
-        // This token can be used until the user revokes it.
-        LOGGER.info("Token: {}", requestToken.getToken());
-        LOGGER.info("Secret: {}", requestToken.getSecret());
-	    //persist to the accessToken for future reference.
-	    storeAccessToken(requestToken.getToken(), requestToken.getSecret());
-	  }
-	
+		Token requestToken = authInterface.getAccessToken(token, new Verifier(tokenKey));
+		LOGGER.info("Authentication success");
+
+		// This token can be used until the user revokes it.
+		LOGGER.info("Token: {}", requestToken.getToken());
+		LOGGER.info("Secret: {}", requestToken.getSecret());
+		//persist to the accessToken for future reference.
+		storeAccessToken(requestToken.getToken(), requestToken.getSecret());
+	}
+
 	private static String[] readProperties() {
 		InputStream is = FlickrAccessTokenRetriever.class.getResourceAsStream(FlickrHarvester.FLICKR_CREDENTIALS_PROPERTIES);
 		if (is == null) {
 			throw new IllegalStateException(FlickrHarvester.FLICKR_CREDENTIALS_PROPERTIES + " file not found.");
 		}
-		
+
 		props = new Properties();
 		try {
 			props.load(is);
@@ -104,17 +104,18 @@ public class FlickrAccessTokenRetriever {
 			throw new IllegalStateException(e);
 		}
 	}
-	  private static void storeAccessToken(String token, String secret){
-		  props.setProperty("OAUTH_CONSUMER_KEY", token);
-		  props.setProperty("OAUTH_CONSUMER_SECRET", secret);
-		  
-		  try (OutputStream os = new FileOutputStream(new File ("src/test/resources" + FlickrHarvester.FLICKR_CREDENTIALS_PROPERTIES))) {
-			  props.store(os, "Infos: QUADRATICAL_BBOX_WIDTH MUST be in m. SEARCH_TERMS MUST be a comma separated list. Do NOT upload this file to any remote ressource.");
-		  } catch (FileNotFoundException e) {
+	
+	private static void storeAccessToken(String token, String secret){
+		props.setProperty("OAUTH_CONSUMER_KEY", token);
+		props.setProperty("OAUTH_CONSUMER_SECRET", secret);
+
+		try (OutputStream os = new FileOutputStream(new File ("src/test/resources" + FlickrHarvester.FLICKR_CREDENTIALS_PROPERTIES))) {
+			props.store(os, "Infos: QUADRATICAL_BBOX_WIDTH MUST be in m. SEARCH_TERMS MUST be a comma separated list. Do NOT upload this file to any remote ressource.");
+		} catch (FileNotFoundException e) {
 			LOGGER.error("Could not find file!", e);
 		} catch (IOException e) {
 			LOGGER.error("Error while writing to file", e);
 		}
-	  }
-	
+	}
+
 }
