@@ -34,7 +34,6 @@ import java.util.Date;
 import org.joda.time.DateTime;
 import org.n52.socialmedia.model.HumanVisualPerceptionObservation;
 import org.n52.socialmedia.model.Procedure;
-import org.n52.socialmedia.util.StringUtil;
 
 import com.flickr4java.flickr.tags.Tag;
 
@@ -85,10 +84,10 @@ public class FlickrMessage implements HumanVisualPerceptionObservation {
 
 	@Override
 	public String getResult() {
-		return StringUtil.escapeForXML(String.format("TITLE: %s; CAPTION: %s; TAGS: %s; ",
+		return String.format("TITLE: %s; CAPTION: %s; TAGS: %s; ",
 				title!=null?!title.isEmpty()?title:"title-not-set":"title-not-set",
 				caption!=null?!caption.isEmpty()?caption:"caption-not-set":"caption-not-set",
-				tags!=null?!tags.isEmpty()?printTags():"tags-not-set":"tags-not-set"));
+				tags!=null?!tags.isEmpty()?printTags():"tags-not-set":"tags-not-set");
 	}
 	
 	private String printTags() {
